@@ -7,7 +7,6 @@
     <meta name="Author" content="JKS"/>
     <title>Refleksomierzacz</title>
     <link rel="stylesheet" href="style.css"/>
-    <script src="script.js"></script>
 </head>
 <body>
 <h1>Refleksomierzacz</h1>
@@ -15,14 +14,16 @@
 Click here
 </section>
 <section id="controls">
-    <div id="start-button"></div>
-    <div id="stop-button"></div>
+    <button id="start-button">Start</button>
+    <button id="stop-button" disabled>Stop</button>
 </section>
 
 <section id="score-area">
-    <span id="min-time">--</span>
-    <span id="max-time">--</span>
-    <span id="avg-time">--</span>
+    Fastest: <span id="min-time">--</span>
+    Slowest: <span id="max-time">--</span>
+    Average: <span id="avg-time">--</span>
 </section>
+
+<script src="script.js"></script>
 </body>
 </html>
