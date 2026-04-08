@@ -1,0 +1,26 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+}
+
+#game-area {
+    width: 400px;
+    height: 300px;
+    background-color: lightgray;
+    margin: 50px auto;
+    border: 3px solid #333;
+    border-radius: 10px;
+    line-height: 300px;
+    text-align: center;
+    cursor: pointer;
+    user-select: none;
+}
+
+#controls {
+    margin-top: 20px;
+}
+
+#score-area {
+    margin-top: 20px;
+    /*display: none;*/
+}
