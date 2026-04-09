@@ -12,7 +12,7 @@
 <h1>Test your reflex!</h1>
 <section id="instructions">
     <p>Click the <strong>"Start"</strong> button and wait until the game area changes color, then click it as quickly as possible.</p>
-    <p>You have <strong>5</strong> tries to get your fastest reaction time.</p>
+    <p>You have <span id="tries-count-text">5</span> tries to get your fastest reaction time.</p>
 </section>
 <section id="game-area">
 Click here
@@ -20,12 +20,23 @@ Click here
 <section id="controls">
     <button id="start-button">Start</button>
     <button id="stop-button" disabled>Stop</button>
+    <button id="settings-button">&#9881;</button>
 </section>
 
 <section id="score-area">
     <p>Fastest: <span id="min-time">--</span> ms</p>
     <p>Slowest: <span id="max-time">--</span> ms</p>
     <p>Average: <span id="avg-time">--</span> ms</p>
+</section>
+
+<section id="settings-modal" class="modal-hidden">
+    <div id="settings-modal-content">
+        <button id="close-settings-button">&times;</button>
+        <h2>Settings</h2>
+        <label for="tries-input">Enter the number of tries you want to have:</label>
+        <input id="tries-input" type="number" min="1" max="30"/>
+        <button id="save-settings-button">Save</button>
+    </div>
 </section>
 
 <script src="script.js"></script>

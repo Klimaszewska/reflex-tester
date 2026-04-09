@@ -1,4 +1,4 @@
-const maximumNumberOfTries = 5;
+let maximumNumberOfTries = 5;
 let isGameRunning = false;
 let isWaitingForUserClick = false;
 let completedTries = 0;
@@ -9,11 +9,19 @@ let timeoutId;
 const gameArea = document.getElementById("game-area");
 const startButton = document.getElementById("start-button");
 const stopButton = document.getElementById("stop-button");
+const settingsButton = document.getElementById("settings-button");
+
+let triesCountText = document.getElementById("tries-count-text");
 const scoreArea = document.getElementById("score-area");
 const minTime = document.getElementById("min-time");
 const maxTime = document.getElementById("max-time");
 const avgTime = document.getElementById("avg-time");
 const initialGameAreaText = document.getElementById("game-area").textContent;
+
+const settingsModal = document.getElementById("settings-modal");
+const closeSettingsButton = document.getElementById("close-settings-button");
+const triesInput = document.getElementById("tries-input");
+const saveSettingsButton = document.getElementById("save-settings-button");
 
 function getRandomDelay() {
     return Math.floor(Math.random() * 3000) + 1000;
@@ -33,7 +41,7 @@ function startNextTry() {
         colorChangedAt = Date.now();
         isWaitingForUserClick = true;
         console.log("Color changed, waiting for user click");
-    }, randomDelay)
+    }, randomDelay);
 }
 
 function resetGameState() {
@@ -59,18 +67,20 @@ function resetStats() {
 function setButtonsOnStart() {
     startButton.disabled = true;
     stopButton.disabled = false;
+    settingsButton.disabled = true;
 }
 
 function setButtonsOnStop() {
     startButton.disabled = false;
     stopButton.disabled = true;
+    settingsButton.disabled = false;
 }
 
 function startGame() {
     console.log("Game started!");
     resetGameState();
     resetStats();
-    setButtonsOnStart()
+    setButtonsOnStart();
     isGameRunning = true;
     startNextTry();
 }
@@ -106,6 +116,32 @@ function updateStats() {
     console.log("Stats updated");
 }
 
+function openSettingsModal() {
+    if (isGameRunning) {
+        return;
+    }
+
+    triesInput.value = maximumNumberOfTries;
+    settingsModal.classList.remove("modal-hidden");
+}
+
+function closeSettingsModal() {
+    settingsModal.classList.add("modal-hidden");
+}
+
+function saveSettings() {
+    const newValue = Number(triesInput.value);
+
+    if (!Number.isInteger(newValue) || newValue < 2 || newValue > 20) {
+        alert("Enter a whole between 2 and 20.");
+        return;
+    }
+
+    maximumNumberOfTries = newValue;
+    triesCountText.textContent = maximumNumberOfTries;
+    closeSettingsModal();
+}
+
 gameArea.addEventListener("click", function () {
     if (isGameRunning && isWaitingForUserClick) {
         console.log("Game area clicked");
@@ -129,4 +165,22 @@ startButton.addEventListener("click", function () {
 
 stopButton.addEventListener("click", function () {
     stopGame();
-})
+});
+
+settingsButton.addEventListener("click", function () {
+    openSettingsModal();
+});
+
+closeSettingsButton.addEventListener("click", function () {
+    closeSettingsModal();
+});
+
+saveSettingsButton.addEventListener("click", function () {
+    saveSettings();
+});
+
+settingsModal.addEventListener("click", function (event) {
+    if (event.target === settingsModal) {
+        closeSettingsModal();
+    }
+});
