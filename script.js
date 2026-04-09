@@ -13,6 +13,7 @@ const scoreArea = document.getElementById("score-area");
 const minTime = document.getElementById("min-time");
 const maxTime = document.getElementById("max-time");
 const avgTime = document.getElementById("avg-time");
+const initialGameAreaText = document.getElementById("game-area").textContent;
 
 function getRandomDelay() {
     return Math.floor(Math.random() * 3000) + 1000;
@@ -40,10 +41,11 @@ function resetGameState() {
     completedTries = 0;
     reactionTimes = [];
     colorChangedAt = null;
+    gameArea.textContent = initialGameAreaText
 }
 
 function resetGameArea() {
-    gameArea.style.backgroundColor = "lightgray";
+    gameArea.style.backgroundColor = "#f7f7f7";
 }
 
 function resetStats() {
@@ -74,7 +76,7 @@ function startGame() {
 }
 
 function stopGame() {
-    console.log("Stop clicked");
+    console.log("Game stopped");
     isGameRunning = false;
     isWaitingForUserClick = false;
     colorChangedAt = null;
@@ -89,6 +91,7 @@ function endGame() {
     setButtonsOnStop();
     clearTimeout(timeoutId);
     resetGameArea();
+    gameArea.innerHTML = `Well done!<br>Your best result is: ${Math.min(...reactionTimes)} ms`;
     console.log("Game ended after maximum number of tries reached");
 }
 
