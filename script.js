@@ -1,7 +1,7 @@
+const maximumNumberOfTries = 5;
 let isGameRunning = false;
 let isWaitingForUserClick = false;
-let numberOfTries = 0;
-let maximumNumberOfTries = 5;
+let completedTries = 0;
 let reactionTimes = [];
 let colorChangedAt;
 let timeoutId;
@@ -22,6 +22,7 @@ function startNextTry() {
     if (!isGameRunning) {
         return;
     }
+    resetGameArea();
     const randomDelay = getRandomDelay();
     timeoutId = setTimeout(function () {
         if (!isGameRunning) {
@@ -36,7 +37,7 @@ function startNextTry() {
 
 function resetGameState() {
     isWaitingForUserClick = false;
-    numberOfTries = 0;
+    completedTries = 0;
     reactionTimes = [];
     colorChangedAt = null;
 }
@@ -50,6 +51,7 @@ function resetStats() {
     maxTime.textContent = "--";
     avgTime.textContent = "--";
     scoreArea.style.display = "none";
+    console.log("Stats reset");
 }
 
 function setButtonsOnStart() {
@@ -67,16 +69,38 @@ function startGame() {
     resetGameState();
     resetStats();
     setButtonsOnStart()
-    resetGameArea();
     isGameRunning = true;
     startNextTry();
+}
+
+function stopGame() {
+    console.log("Stop clicked");
+    isGameRunning = false;
+    isWaitingForUserClick = false;
+    colorChangedAt = null;
+    setButtonsOnStop();
+    clearTimeout(timeoutId);
+    resetGameArea();
 }
 
 function endGame() {
     isGameRunning = false;
     isWaitingForUserClick = false;
     setButtonsOnStop();
-    console.log("Game stopped after maximum numbers of tries reached");
+    clearTimeout(timeoutId);
+    resetGameArea();
+    console.log("Game ended after maximum number of tries reached");
+}
+
+function updateStats() {
+    const min = Math.min(...reactionTimes);
+    const max = Math.max(...reactionTimes);
+    const sum = reactionTimes.reduce((total, currentValue) => total + currentValue, 0);
+    const avg = Math.round(sum / reactionTimes.length);
+    minTime.textContent = min;
+    maxTime.textContent = max;
+    avgTime.textContent = avg;
+    console.log("Stats updated");
 }
 
 gameArea.addEventListener("click", function () {
@@ -84,11 +108,11 @@ gameArea.addEventListener("click", function () {
         console.log("Game area clicked");
         let reactionTime = Date.now() - colorChangedAt;
         reactionTimes.push(reactionTime);
-        numberOfTries++;
+        completedTries++;
         isWaitingForUserClick = false;
         scoreArea.style.display = "block";
-        resetGameArea();
-        if (numberOfTries < 5) {
+        updateStats();
+        if (completedTries < maximumNumberOfTries) {
             startNextTry();
         } else {
             endGame();
@@ -101,11 +125,5 @@ startButton.addEventListener("click", function () {
 })
 
 stopButton.addEventListener("click", function () {
-    console.log("Stop clicked");
-    isGameRunning = false;
-    isWaitingForUserClick = false;
-    colorChangedAt = null;
-    setButtonsOnStop();
-    clearTimeout(timeoutId);
-    resetGameArea();
+    stopGame();
 })
